@@ -9,6 +9,7 @@ A C# console application for calculating investment performance attribution usin
 - **Clean Design**: Uses object-oriented principles for modularity and maintainability.
 
 ## Project Structure
+```html
 AttributionEngine/
 ├── .git/                           # Git repository
 ├── AttributionEngine.csproj        # Main project file
@@ -26,6 +27,7 @@ AttributionEngine/
 ├── Data/                           # Data files
 │   ├── sample-data.json            # Sample portfolio and benchmark data
 ├── AttributionEngine.sln           # Solution file
+```
 
 ## Requirements
 - .NET 9.0 SDK
@@ -52,6 +54,7 @@ Attribution results (allocation and selection effects)
 
 ## Sample Output
 
+```html
 Investment Attribution Engine v1.0
 Portfolio Return: 7.50%
 Benchmark Return: 6.00%
@@ -66,6 +69,6 @@ Attribution Results:
   Allocation Effect: 0.00%
   Selection Effect: 1.90%
   Total Effect: 1.90%
-
+```
 
 
