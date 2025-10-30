@@ -1,0 +1,50 @@
+﻿@inject NavigationManager Nav
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<MudAppBar Elevation="0" Dense="true" Class="mud-theme-primary">
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+    <MudText Typo="Typo.h6" Class="ml-3">AttributionEngine.Blazor</MudText>
+    <MudSpacer />
+</MudAppBar>
+
+<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="DrawerVariant.Responsive"
+    Breakpoint="Breakpoint.Sm">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">Menu</MudText>
+    </MudDrawerHeader>
+
+    <MudNavMenu>
+        <MudNavLink Href="" Match="NavLinkMatch.All">
+            <MudIcon Icon="@Icons.Material.Filled.Home" Class="mr-3" />
+            Home
+        </MudNavLink>
+
+        <MudNavLink Href="charts">
+            <MudIcon Icon="@Icons.Material.Filled.ListAlt" Class="mr-3" />
+            Charts
+        </MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    private bool _drawerOpen = false;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _drawerOpen = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= HandleLocationChanged;
+    }
+}

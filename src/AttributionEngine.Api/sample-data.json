@@ -1,0 +1,42 @@
+{
+    "Portfolio": {
+        "Holdings": [
+            {
+                "AssetName": "Apple",
+                "Sector": "Tech",
+                "Weight": 0.3,
+                "Return": 10.0
+            },
+            {
+                "AssetName": "Microsoft",
+                "Sector": "Tech",
+                "Weight": 0.2,
+                "Return": 12.0
+            },
+            {
+                "AssetName": "Exxon",
+                "Sector": "Energy",
+                "Weight": 0.5,
+                "Return": 5.0
+            }
+        ],
+        "Return": 7.5
+    },
+    "Benchmark": {
+        "Holdings": [
+            {
+                "AssetName": "Tech",
+                "Sector": "Tech",
+                "Weight": 0.5,
+                "Return": 8.0
+            },
+            {
+                "AssetName": "Energy",
+                "Sector": "Energy",
+                "Weight": 0.5,
+                "Return": 4.0
+            }
+        ],
+        "Return": 6.0
+    }
+}

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- CRITICAL: Disable CSS isolation for MudBlazor -->
+    <MudBlazorCssIsolation>false</MudBlazorCssIsolation>
+
+    <!-- Also disable globally (backup) -->
+    <BlazorEnableCssIsolation>false</BlazorEnableCssIsolation>
+
+    <!-- Ensure static assets -->
+    <StaticWebAssetProjectType>BlazorWebAssembly</StaticWebAssetProjectType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazorExpress.ChartJS" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.2" PrivateAssets="all" />
+    <PackageReference Include="MudBlazor" Version="8.13.0" />
+  </ItemGroup>
+
+</Project>
