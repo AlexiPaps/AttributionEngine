@@ -1,3 +1,88 @@
 @page "/charts"
+@inject HttpClient Http
+@using AttributionEngine.Core.DTOs
 
-<h1>To do: Add Charts...</h1>
+@if (isLoading)
+{
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+}
+else if (chartData is not null)
+{
+    <MudPaper Class="d-flex justify-center pa-4" Elevation="2">
+        <PieChart @ref="pieChart" Width="500" />
+    </MudPaper>
+}
+else
+{
+    <MudText Color="Color.Error">Failed to load chart data.</MudText>
+}
+
+@code {
+    private AttributionResultDto? result;
+
+    private PieChart pieChart = default!;
+    private PieChartOptions? pieChartOptions;
+    private ChartData? chartData;
+    private string[]? backgroundColors;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            result = await Http.GetFromJsonAsync<AttributionResultDto>("api/attribution/run");
+
+            if (result is not null)
+            {
+                backgroundColors = ColorUtility.CategoricalTwelveColors;
+
+                chartData = new ChartData
+                {
+                    Labels = GetPortfolioLabels(),
+                    Datasets = new List<IChartDataset> { GetAttributionPieChartDataset() }
+                };
+
+                pieChartOptions = new PieChartOptions
+                {
+                    Responsive = true
+                };
+                pieChartOptions.Plugins.Title!.Display = true;
+                pieChartOptions.Plugins.Title.Text = "Portfolio Weight Distribution";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged(); // triggers render with the chart placeholder
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && chartData is not null && pieChartOptions is not null)
+        {
+            await pieChart.InitializeAsync(chartData, pieChartOptions);
+        }
+    }
+
+    private PieChartDataset GetAttributionPieChartDataset()
+    {
+        var data = result?.PortfolioHoldings ?? new();
+
+        return new PieChartDataset
+        {
+            Label = "Portfolio Weights",
+            Data = data.Select(h => (double?)Math.Round(h.Weight * 100, 2)).ToList(),
+            BackgroundColor = ColorUtility.CategoricalTwelveColors.Take(data.Count).ToList(),
+        };
+    }
+
+    private List<string> GetPortfolioLabels()
+    {
+        return result?.PortfolioHoldings.Select(h => h.AssetName).ToList() ?? new();
+    }
+}

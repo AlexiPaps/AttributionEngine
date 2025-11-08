@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject HttpClient Http
+@using AttributionEngine.Core.DTOs
 
 <PageTitle>Home</PageTitle>
 
@@ -111,30 +112,6 @@
         {
             Console.WriteLine($"Error loading data: {ex.Message}", Severity.Error);
         }
-    }
-
-    public class AttributionResultDto
-    {
-        public double PortfolioReturn { get; set; }
-        public double BenchmarkReturn { get; set; }
-        public AttributionDto Attribution { get; set; } = new();
-        public List<HoldingDto> PortfolioHoldings { get; set; } = new();
-        public List<HoldingDto> BenchmarkHoldings { get; set; } = new();
-    }
-
-    public class AttributionDto
-    {
-        public double AllocationEffect { get; set; }
-        public double SelectionEffect { get; set; }
-        public double TotalEffect { get; set; }
-    }
-
-    public class HoldingDto
-    {
-        public string AssetName { get; set; } = "";
-        public string Sector { get; set; } = "";
-        public double Weight { get; set; }
-        public double Return { get; set; }
     }
 
     private string GetHoldingRowClass(HoldingDto holding, int index)
