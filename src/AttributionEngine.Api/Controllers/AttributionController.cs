@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-
 using AttributionEngine.Core.AttributionModels;
-using AttributionEngine.Core.Engine;
-using AttributionEngine.Core.Models;
 using AttributionEngine.Infrastructure.Data;
+using AttributionEngine.Core.DTOs;
 
 namespace AttributionEngine.Api.Controllers
 {
@@ -16,56 +14,43 @@ namespace AttributionEngine.Api.Controllers
         {
             try
             {
-                // Log start
                 Console.WriteLine("Running Attribution Engine...");
 
-                // Instantiate DataLoader
-                // var loader = new DataLoader();
-
-                // Load data
-                // var loader = new DataLoader();
-                // var (portfolio, benchmark) = loader.LoadFromJson("Data/sample-data.json");
-                // var dataPath = Path.Combine(AppContext.BaseDirectory, "Data", "sample-data.json");
-                // var (portfolio, benchmark) = loader.LoadFromJson(dataPath);
                 var loader = new DataLoader();
                 var (portfolio, benchmark) = loader.LoadFromJson("sample-data.json");
 
-                // Create engine
                 IAttributionModel model = new BrinsonFachlerModel();
                 var engine = new Core.Engine.AttributionEngine(model);
 
-                // Run analysis
                 var result = engine.RunAnalysis(portfolio, benchmark);
 
-                // Prepare response object
-                var response = new
+                var dto = new AttributionResultDto
                 {
                     PortfolioReturn = portfolio.Return,
                     BenchmarkReturn = benchmark.Return,
-                    Attribution = new
+                    Attribution = new AttributionDto
                     {
-                        result.AllocationEffect,
-                        result.SelectionEffect,
+                        AllocationEffect = result.AllocationEffect,
+                        SelectionEffect = result.SelectionEffect,
                         TotalEffect = result.AllocationEffect + result.SelectionEffect
                     },
-                    PortfolioHoldings = portfolio.Holdings.Select(h => new
+                    PortfolioHoldings = portfolio.Holdings.Select(h => new HoldingDto
                     {
-                        h.AssetName,
-                        h.Sector,
+                        AssetName = h.AssetName,
+                        Sector = h.Sector,
                         Weight = h.Weight,
-                        h.Return
-                    }),
-                    BenchmarkHoldings = benchmark.Holdings.Select(h => new
+                        Return = h.Return
+                    }).ToList(),
+                    BenchmarkHoldings = benchmark.Holdings.Select(h => new HoldingDto
                     {
-                        h.AssetName,
-                        h.Sector,
+                        AssetName = h.AssetName,
+                        Sector = h.Sector,
                         Weight = h.Weight,
-                        h.Return
-                    })
+                        Return = h.Return
+                    }).ToList()
                 };
 
-                // Return JSON
-                return Ok(response);
+                return Ok(dto);
             }
             catch (Exception ex)
             {
